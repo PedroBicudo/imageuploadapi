@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: imageuploader-api
+
+  profiles.active: ${PROFILE:dev}
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    platform: postgres
+    url: jdbc:postgresql://${DB_URL:localhost}:${DB_PORT:5432}/${DB_NAME:postgres}?currentSchema=${DB_SCHEMA:public}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:12345}
+    initialization-mode: always
+    continue-on-error: true
+
+  jpa:
+    database: POSTGRESQL
+    properties:
+      hibernate.default_schema: ${DB_SCHEMA:public}
