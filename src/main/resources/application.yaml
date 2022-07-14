@@ -17,3 +17,7 @@ spring:
     database: POSTGRESQL
     properties:
       hibernate.default_schema: ${DB_SCHEMA:public}
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
