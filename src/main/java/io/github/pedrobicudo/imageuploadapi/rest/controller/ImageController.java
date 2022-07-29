@@ -74,7 +74,11 @@ public class ImageController {
                     })}
             )
     })
-    @PostMapping(consumes = {"multipart/form-data"}, produces = {"application/json"})
+    @PostMapping(consumes = {
+            MediaType.MULTIPART_FORM_DATA_VALUE
+    }, produces = {
+            MediaType.APPLICATION_JSON_VALUE
+    })
     @ResponseStatus(HttpStatus.CREATED)
     public ImagePath upload(
             @RequestBody MultipartFile file
