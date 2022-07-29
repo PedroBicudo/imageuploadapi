@@ -88,7 +88,15 @@ public class ImageController {
 
     @Operation(description = "get image")
     @ApiResponses({
-            @ApiResponse(responseCode = "302", description = "image found"),
+            @ApiResponse(
+                    responseCode = "200", description = "image found",
+                    content = {
+                            @Content(mediaType = MediaType.IMAGE_PNG_VALUE),
+                            @Content(mediaType = MediaType.IMAGE_JPEG_VALUE),
+                            @Content(mediaType = MediaType.IMAGE_GIF_VALUE),
+                            @Content(mediaType = MediaType.APPLICATION_XML_VALUE)
+                    }
+            ),
             @ApiResponse(
                     responseCode = "400", description = "Bad Request",
                     content = {@Content(
@@ -138,7 +146,7 @@ public class ImageController {
         headers.add(HttpHeaders.CONTENT_LENGTH, ""+image.getContent().length);
 
         return ResponseEntity
-                .status(HttpStatus.FOUND)
+                .status(HttpStatus.OK)
                 .headers(headers)
                 .body(resource);
     }

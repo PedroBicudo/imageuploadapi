@@ -139,8 +139,8 @@ class ImageControllerIntegrationTest {
                 .thenReturn(imageDTO);
 
         mockMvc.perform(get("/images/photo-"+id))
-                .andExpect(status().isFound())
-                .andExpect(header().string("content-disposition", "inline; filename=photo-f6e551e0-b69a-401f-8ee2-99bfbbe2c571"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("content-disposition", "inline; filename=\"photo-f6e551e0-b69a-401f-8ee2-99bfbbe2c571\""))
                 .andExpect(content().contentType("image/png"))
                 .andExpect(header().string("content-length", "3"));
     }
