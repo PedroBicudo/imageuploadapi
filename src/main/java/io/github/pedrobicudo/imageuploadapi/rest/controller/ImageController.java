@@ -14,9 +14,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -122,15 +122,25 @@ public class ImageController {
             MediaType.IMAGE_PNG_VALUE,
             MediaType.APPLICATION_XML_VALUE
     })
-    public ResponseEntity<byte[]> findById(
+    public ResponseEntity<Resource> findById(
             @PathVariable("id") UUID id
     ) {
         ImageDTO image = service.findById(id);
+        ByteArrayResource resource = new ByteArrayResource(image.getContent());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition
+                .inline()
+                .filename("photo-"+id.toString())
+                .build().toString()
+        );
+        headers.add(HttpHeaders.CONTENT_TYPE, image.getMediaType().toString());
+        headers.add(HttpHeaders.CONTENT_LENGTH, ""+image.getContent().length);
+
         return ResponseEntity
                 .status(HttpStatus.FOUND)
-                .contentType(image.getMediaType())
-                .contentLength(image.getContent().length)
-                .body(image.getContent());
+                .headers(headers)
+                .body(resource);
     }
 
     @ExceptionHandler(MissingPathVariableException.class)
