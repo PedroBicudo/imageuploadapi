@@ -20,8 +20,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ImageService implements IImageService {
 
-    private static final int MAX_IMAGE_SIZE = 5242880; // 5MB
-
     @Autowired
     private ImageRepository repository;
 
@@ -79,19 +77,8 @@ public class ImageService implements IImageService {
     private void validateImage(MultipartFile file) {
         if (file == null) throw new ImageNotProvidedException();
         if (file.isEmpty()) throw new ImageEmptyException();
-        if (!isLessThanMaximumSize(file)) throw new ImageTooBigException();
         if (!isImage(file)) throw new NotAImageException();
 
-    }
-
-    private boolean isLessThanMaximumSize(MultipartFile file) {
-        try {
-            return file.getBytes().length <= MAX_IMAGE_SIZE;
-
-        } catch (IOException exception) {
-            return false;
-
-        }
     }
 
     private boolean isImage(MultipartFile file) {

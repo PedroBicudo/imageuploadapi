@@ -57,19 +57,6 @@ class ImageServiceTest {
     }
 
     @Test
-    @DisplayName("image with more than 5mb must throw ImageTooBigException")
-    public void testImageWithMoreThan5MBMustThrowImageTooBigException() throws IOException {
-        Mockito.when(mockFile.getBytes()).thenReturn(new byte[5242881]); // 5MB + 1
-
-        DomainException exception = assertThrows(ImageTooBigException.class, () -> {
-            service.upload(mockFile);
-        });
-
-        assertEquals("the image size must have at most 5MB", exception.getMessage());
-        assertEquals(ErrorCode.IMAGE_TOO_BIG, exception.getCode());
-    }
-
-    @Test
     @DisplayName("incorrect image content-type must throw NotAImageException")
     public void testIncorrectImageContentTypeMustThrowNotAImageException() throws IOException {
         Mockito.when(mockFile.getBytes()).thenReturn(new byte[100]);

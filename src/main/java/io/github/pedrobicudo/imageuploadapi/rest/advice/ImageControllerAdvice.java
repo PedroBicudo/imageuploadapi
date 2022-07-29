@@ -1,11 +1,13 @@
 package io.github.pedrobicudo.imageuploadapi.rest.advice;
 
+import io.github.pedrobicudo.imageuploadapi.model.domain.enums.ErrorCode;
 import io.github.pedrobicudo.imageuploadapi.model.domain.exceptions.*;
 import io.github.pedrobicudo.imageuploadapi.rest.ApiError;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
 public class ImageControllerAdvice {
@@ -22,10 +24,10 @@ public class ImageControllerAdvice {
         return new ApiError(e.getCode(), e.getMessage());
     }
 
-    @ExceptionHandler(ImageTooBigException.class)
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public ApiError handleImageTooBigException(ImageTooBigException e) {
-        return new ApiError(e.getCode(), e.getMessage());
+    public ApiError handleImageTooBigException() {
+        return new ApiError(ErrorCode.IMAGE_TOO_BIG, "the image size must have at most 5MB");
     }
 
     @ExceptionHandler(NotAImageException.class)
