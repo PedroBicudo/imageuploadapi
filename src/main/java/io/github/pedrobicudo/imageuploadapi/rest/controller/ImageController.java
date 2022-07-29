@@ -38,7 +38,9 @@ public class ImageController {
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201", description = "Image Uploaded",
-                    content = {@Content(schema = @Schema(implementation = ImagePath.class), examples = {
+                    content = {@Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ImagePath.class), examples = {
                             @ExampleObject(value = "{\n" +
                                     "\"name\": \"f6e551e0-b69a-401f-8ee2-99bfbbe2c571\",\n" +
                                     "\"location\": \"/images/photo-f6e551e0-b69a-401f-8ee2-99bfbbe2c571\"\n" +
@@ -48,7 +50,9 @@ public class ImageController {
             ),
             @ApiResponse(
                     responseCode = "400", description = "Bad Request",
-                    content = {@Content(schema = @Schema(
+                    content = {@Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(
                             implementation = ApiError.class), examples = {
                             @ExampleObject(value = "{\n" +
                                     "\"code\": \"IMAGE_EMPTY\",\n" +
@@ -59,7 +63,9 @@ public class ImageController {
             ),
             @ApiResponse(
                     responseCode = "422", description = "Unprocessable Entity",
-                    content = {@Content(schema = @Schema(implementation = ApiError.class), examples = {
+                    content = {@Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ApiError.class), examples = {
                             @ExampleObject(value = "{\n" +
                                     "\"code\": \"IMAGE_TOO_BIG\"," +
                                     "\n\"message\": \"the image size must have at most 5MB\"\n" +
