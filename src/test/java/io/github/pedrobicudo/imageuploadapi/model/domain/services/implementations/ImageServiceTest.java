@@ -1,8 +1,10 @@
 package io.github.pedrobicudo.imageuploadapi.model.domain.services.implementations;
 
+import io.github.pedrobicudo.imageuploadapi.model.domain.entities.Image;
 import io.github.pedrobicudo.imageuploadapi.model.domain.enums.ErrorCode;
 import io.github.pedrobicudo.imageuploadapi.model.domain.exceptions.*;
 import io.github.pedrobicudo.imageuploadapi.model.domain.repositories.ImageRepository;
+import io.github.pedrobicudo.imageuploadapi.rest.dto.ImageDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,12 +12,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class ImageServiceTest {
@@ -77,6 +81,42 @@ class ImageServiceTest {
 
         assertEquals("the provided file is not a image", exception.getMessage());
         assertEquals(ErrorCode.NOT_A_IMAGE, exception.getCode());
+    }
+
+    @Test
+    @DisplayName("id non existent must throw ImageNotFoundException")
+    public void testIdNonExistentMustThrowImageNotFoundException() {
+        Mockito.when(repository.findById(Mockito.any()))
+                .thenReturn(Optional.empty());
+
+        UUID id = UUID.fromString("f6e551e0-b69a-401f-8ee2-99bfbbe2c571");
+
+        DomainException exception = assertThrows(ImageNotFoundException.class, () -> {
+            service.findById(id);
+        });
+
+        assertEquals("image not found", exception.getMessage());
+        assertEquals(ErrorCode.IMAGE_NOT_FOUND, exception.getCode());
+
+    }
+
+    @Test
+    @DisplayName("image dto must be returned successfully")
+    public void testImageDTOMustBeReturnedSuccessfully() {
+        UUID id = UUID.fromString("f6e551e0-b69a-401f-8ee2-99bfbbe2c571");
+        Byte[] content = {0x1, 0x2, 0x3};
+        String mediaType = "image/png";
+        Image image = new Image(id, content, mediaType);
+
+        Mockito.when(repository.findById(Mockito.any()))
+                .thenReturn(Optional.of(image));
+
+        ImageDTO dtoExpected = new ImageDTO(MediaType.IMAGE_PNG, new byte[] {0x1, 0x2, 0x3});
+        ImageDTO dtoGot = service.findById(id);
+
+        assertEquals(dtoExpected.getMediaType(), dtoGot.getMediaType());
+        assertArrayEquals(dtoExpected.getContent(), dtoGot.getContent());
+
     }
 
 }

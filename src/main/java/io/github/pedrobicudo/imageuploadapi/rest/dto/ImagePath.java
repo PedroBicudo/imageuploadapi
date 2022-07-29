@@ -19,12 +19,12 @@ public class ImagePath {
 
     @JsonProperty("location")
     public String location() {
-        return "/images/"+name();
+        return "/images/photo-"+name();
     }
 
     @JsonProperty("name")
     public String name() {
-        return "photo-"+imageId.toString();
+        return imageId.toString();
     }
 
 }

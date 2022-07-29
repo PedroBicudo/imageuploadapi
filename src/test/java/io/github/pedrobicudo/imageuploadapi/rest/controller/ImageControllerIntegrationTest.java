@@ -1,12 +1,10 @@
 package io.github.pedrobicudo.imageuploadapi.rest.controller;
 
 import io.github.pedrobicudo.imageuploadapi.model.domain.enums.ErrorCode;
-import io.github.pedrobicudo.imageuploadapi.model.domain.exceptions.ImageEmptyException;
-import io.github.pedrobicudo.imageuploadapi.model.domain.exceptions.ImageNotProvidedException;
-import io.github.pedrobicudo.imageuploadapi.model.domain.exceptions.InvalidImageException;
-import io.github.pedrobicudo.imageuploadapi.model.domain.exceptions.NotAImageException;
+import io.github.pedrobicudo.imageuploadapi.model.domain.exceptions.*;
 import io.github.pedrobicudo.imageuploadapi.model.domain.repositories.ImageRepository;
 import io.github.pedrobicudo.imageuploadapi.model.domain.services.interfaces.IImageService;
+import io.github.pedrobicudo.imageuploadapi.rest.dto.ImageDTO;
 import io.github.pedrobicudo.imageuploadapi.rest.dto.ImagePath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,12 +12,14 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -50,7 +50,7 @@ class ImageControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().string("content-type", "application/json"))
                 .andExpect(jsonPath("$.location").value("/images/photo-7adbb1e4-3edf-4b83-bc1e-76a0ab5bc0b2"))
-                .andExpect(jsonPath("$.name").value("photo-7adbb1e4-3edf-4b83-bc1e-76a0ab5bc0b2"));
+                .andExpect(jsonPath("$.name").value("7adbb1e4-3edf-4b83-bc1e-76a0ab5bc0b2"));
 
     }
 
@@ -107,6 +107,42 @@ class ImageControllerIntegrationTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.code").value(ErrorCode.INVALID_IMAGE.toString()))
                 .andExpect(jsonPath("$.message").value("the provided image is invalid"));
+    }
+
+    @Test
+    @DisplayName("image not found must return Not found status code")
+    public void testImageNotFoundMustReturnNotFoundStatusCode() throws Exception {
+        String id = "f6e551e0-b69a-401f-8ee2-99bfbbe2c571";
+        Mockito.when(service.findById(Mockito.any()))
+                .thenThrow(new ImageNotFoundException());
+
+        mockMvc.perform(get("/images/photo-"+id))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(ErrorCode.IMAGE_NOT_FOUND.toString()))
+                .andExpect(jsonPath("$.message").value("image not found"));
+    }
+
+    @Test
+    @DisplayName("invalid id structure must return bad request")
+    public void testInvalidIdStructureMustReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/images/photo-"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(ErrorCode.VALID_IMAGE_ID_NOT_PROVIDED.toString()))
+                .andExpect(jsonPath("$.message").value("valid image id not provided"));
+    }
+
+    @Test
+    @DisplayName("image must be returned successfully")
+    public void testImageMustBeReturnedSuccessfully() throws Exception {
+        String id = "f6e551e0-b69a-401f-8ee2-99bfbbe2c571";
+        ImageDTO imageDTO = new ImageDTO(MediaType.IMAGE_PNG, new byte[] {0x1, 0x1, 0x1});
+        Mockito.when(service.findById(Mockito.any()))
+                .thenReturn(imageDTO);
+
+        mockMvc.perform(get("/images/photo-"+id))
+                .andExpect(status().isFound())
+                .andExpect(content().contentType("image/png"))
+                .andExpect(header().string("content-length", "3"));
     }
 
 }

@@ -4,14 +4,17 @@ import io.github.pedrobicudo.imageuploadapi.model.domain.entities.Image;
 import io.github.pedrobicudo.imageuploadapi.model.domain.exceptions.*;
 import io.github.pedrobicudo.imageuploadapi.model.domain.repositories.ImageRepository;
 import io.github.pedrobicudo.imageuploadapi.model.domain.services.interfaces.IImageService;
+import io.github.pedrobicudo.imageuploadapi.rest.dto.ImageDTO;
 import io.github.pedrobicudo.imageuploadapi.rest.dto.ImagePath;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +43,28 @@ public class ImageService implements IImageService {
         }
 
         return imagePath;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ImageDTO findById(UUID id) {
+        Image image = repository.findById(id)
+                .orElseThrow(ImageNotFoundException::new);
+
+        ImageDTO dto = new ImageDTO();
+        dto.setMediaType(MediaType.parseMediaType(image.getMediaType()));
+        dto.setContent(toPrimitiveByte(image.getContent()));
+
+        return dto;
+    }
+
+    private byte[] toPrimitiveByte(Byte[] content) {
+        byte[] contentPri = new byte[content.length];
+        for (int pos = 0; pos < contentPri.length; pos++) {
+            contentPri[pos] = content[pos];
+        }
+
+        return contentPri;
     }
 
     private Byte[] toWrapperByte(byte[] content) {

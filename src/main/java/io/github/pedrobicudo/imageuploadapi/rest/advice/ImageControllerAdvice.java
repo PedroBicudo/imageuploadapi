@@ -40,4 +40,10 @@ public class ImageControllerAdvice {
         return new ApiError(e.getCode(), e.getMessage());
     }
 
+    @ExceptionHandler(ImageNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleImageNotFoundException(ImageNotFoundException e) {
+        return new ApiError(e.getCode(), e.getMessage());
+    }
+
 }
