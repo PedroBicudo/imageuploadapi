@@ -30,6 +30,7 @@ public class ImageService implements IImageService {
         try {
             Image image = new Image();
             image.setContent(toWrapperByte(file.getBytes()));
+            image.setMediaType(file.getContentType());
             repository.save(image);
             imagePath.setImageId(image.getId());
 

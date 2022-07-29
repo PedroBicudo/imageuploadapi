@@ -22,4 +22,7 @@ public class Image {
     @Column(name = "CONTENT", nullable = false)
     private Byte[] content = null;
 
+    @Column(name = "MEDIA_TYPE", nullable = false)
+    private String mediaType;
+
 }
