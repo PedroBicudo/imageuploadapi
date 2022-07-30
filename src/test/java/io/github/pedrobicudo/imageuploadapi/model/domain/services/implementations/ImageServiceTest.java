@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -93,7 +94,7 @@ class ImageServiceTest {
         UUID id = UUID.fromString("f6e551e0-b69a-401f-8ee2-99bfbbe2c571");
         Byte[] content = {0x1, 0x2, 0x3};
         String mediaType = "image/png";
-        Image image = new Image(id, content, mediaType);
+        Image image = new Image(id, content, mediaType, new Date());
 
         Mockito.when(repository.findById(Mockito.any()))
                 .thenReturn(Optional.of(image));

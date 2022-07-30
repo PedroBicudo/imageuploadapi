@@ -67,7 +67,7 @@ class ImageRepositoryIntegrationTest {
     @Test
     @DisplayName("content must be not null")
     public void testContentMustNotBeNull() {
-        Image image = new Image(null, null, null);
+        Image image = new Image(null, null, null, null);
 
         assertThrows(PersistenceException.class, () -> {
             entityManager.persistAndFlush(image);
@@ -78,7 +78,7 @@ class ImageRepositoryIntegrationTest {
     @Test
     @DisplayName("mediaType must be not null")
     public void testMediaTypeMustNotBeNull() {
-        Image image = new Image(null, new Byte[] {0x1}, null);
+        Image image = new Image(null, new Byte[] {0x1}, null, null);
 
         assertThrows(PersistenceException.class, () -> {
             entityManager.persistAndFlush(image);

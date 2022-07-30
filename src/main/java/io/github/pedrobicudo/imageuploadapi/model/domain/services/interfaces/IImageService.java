@@ -4,9 +4,11 @@ import io.github.pedrobicudo.imageuploadapi.rest.dto.ImageDTO;
 import io.github.pedrobicudo.imageuploadapi.rest.dto.ImagePath;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.UUID;
 
 public interface IImageService {
     ImagePath upload(MultipartFile file);
     ImageDTO findById(UUID id);
+    void deleteAllImagesBefore(Date date);
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -24,5 +25,8 @@ public class Image {
 
     @Column(name = "MEDIA_TYPE", nullable = false)
     private String mediaType;
+
+    @Column(name = "CREATED", nullable = false)
+    private Date created = new Date();
 
 }

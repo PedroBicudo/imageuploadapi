@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -54,6 +55,12 @@ public class ImageService implements IImageService {
         dto.setContent(toPrimitiveByte(image.getContent()));
 
         return dto;
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllImagesBefore(Date date) {
+        repository.deleteByCreatedLessThanEqual(date);
     }
 
     private byte[] toPrimitiveByte(Byte[] content) {
