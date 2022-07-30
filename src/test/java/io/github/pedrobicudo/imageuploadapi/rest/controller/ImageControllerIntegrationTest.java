@@ -145,4 +145,13 @@ class ImageControllerIntegrationTest {
                 .andExpect(header().string("content-length", "3"));
     }
 
+    @Test
+    @DisplayName("invalid uuid must return bad request status code")
+    public void testInvalidUUIDMustReturnBadRequestStatusCode() throws Exception {
+        mockMvc.perform(get("/images/photo-123"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(ErrorCode.VALID_IMAGE_ID_NOT_PROVIDED.toString()))
+                .andExpect(jsonPath("$.message").value("valid image id not provided"));
+    }
+
 }

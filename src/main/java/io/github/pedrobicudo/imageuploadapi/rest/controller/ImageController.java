@@ -156,4 +156,10 @@ public class ImageController {
     public ApiError handleMissingPathVariableException(MissingPathVariableException e) {
         return new ApiError(ErrorCode.VALID_IMAGE_ID_NOT_PROVIDED, "valid image id not provided");
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleIllegalArgumentException(IllegalArgumentException e) {
+        return new ApiError(ErrorCode.VALID_IMAGE_ID_NOT_PROVIDED, "valid image id not provided");
+    }
 }
