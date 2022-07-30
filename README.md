@@ -1,6 +1,7 @@
 <div align="center">
     <h2>Image uploader API</h2>
     <p>API para upload e acesso de imagens.</p>
+    <a href="https://imageuploader-pedrobicudo.herokuapp.com/swagger-ui.html">Documentação</a>
 </div>
 
 ## Motivação
