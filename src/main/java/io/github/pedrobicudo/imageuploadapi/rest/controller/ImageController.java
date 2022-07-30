@@ -88,15 +88,7 @@ public class ImageController {
 
     @Operation(description = "get image")
     @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200", description = "image found",
-                    content = {
-                            @Content(mediaType = MediaType.IMAGE_PNG_VALUE),
-                            @Content(mediaType = MediaType.IMAGE_JPEG_VALUE),
-                            @Content(mediaType = MediaType.IMAGE_GIF_VALUE),
-                            @Content(mediaType = MediaType.APPLICATION_XML_VALUE)
-                    }
-            ),
+            @ApiResponse(responseCode = "200", description = "image found"),
             @ApiResponse(
                     responseCode = "400", description = "Bad Request",
                     content = {@Content(
@@ -124,12 +116,7 @@ public class ImageController {
                     })}
             )
     })
-    @GetMapping(value = "/photo-{id}", produces = {
-            MediaType.IMAGE_GIF_VALUE,
-            MediaType.IMAGE_JPEG_VALUE,
-            MediaType.IMAGE_PNG_VALUE,
-            MediaType.APPLICATION_XML_VALUE
-    })
+    @GetMapping(value = "/photo-{id}")
     public ResponseEntity<Resource> findById(
             @PathVariable("id") UUID id
     ) {
