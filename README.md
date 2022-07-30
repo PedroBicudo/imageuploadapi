@@ -22,6 +22,12 @@ mvn clean package
 java -jar target/*.jar
 ```
 
+### Documentação
+**Local**
+```shell
+localhost:8080/swagger-ui/index.html
+```
+
 ## Informações extras
 ### Tecnologias usadas
 - Java
