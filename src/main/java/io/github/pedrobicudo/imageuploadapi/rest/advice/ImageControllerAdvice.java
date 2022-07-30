@@ -4,6 +4,7 @@ import io.github.pedrobicudo.imageuploadapi.model.domain.enums.ErrorCode;
 import io.github.pedrobicudo.imageuploadapi.model.domain.exceptions.*;
 import io.github.pedrobicudo.imageuploadapi.rest.ApiError;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,6 +12,12 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
 public class ImageControllerAdvice {
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public ApiError handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        return new ApiError(ErrorCode.METHOD_NOT_ALLOWED, "method not allowed for given route");
+    }
 
     @ExceptionHandler(ImageNotProvidedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
