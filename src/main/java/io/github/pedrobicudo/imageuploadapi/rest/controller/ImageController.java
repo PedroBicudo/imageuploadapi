@@ -74,6 +74,7 @@ public class ImageController {
                     })}
             )
     })
+    @CrossOrigin(origins = {"*"}, methods = {RequestMethod.POST})
     @PostMapping(consumes = {
             MediaType.MULTIPART_FORM_DATA_VALUE
     }, produces = {
@@ -116,6 +117,7 @@ public class ImageController {
                     })}
             )
     })
+    @CrossOrigin(origins = {"*"}, methods = {RequestMethod.GET})
     @GetMapping(value = "/photo-{id}")
     public ResponseEntity<Resource> findById(
             @PathVariable("id") UUID id
