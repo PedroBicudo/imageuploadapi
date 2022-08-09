@@ -25,3 +25,12 @@ spring:
   servlet:
     multipart:
       max-file-size: 5MB
+
+openapi-info:
+  application:
+    title: Image uploader
+    description: API para upload e acesso de imagens.
+  contact:
+    name: PedroBicudo
+    email: pedroabicudo@outlook.com
+    url: https://github.com/PedroBicudo
